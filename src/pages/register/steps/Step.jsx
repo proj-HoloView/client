@@ -135,7 +135,7 @@ function Two(props) {
         <div className={styles.container}>
             {
                 inputs.map(input => {
-                    return <Input.Label label={input.label} placeholder={input.placeholder} vertical labelgap='.1rem' handleOnInput={input.handleOnInput} disabled={input.disabled} name={input.name} value={input.value} maxLength={input.maxLength} />
+                    return <Input.Label key={input.label} label={input.label} placeholder={input.placeholder} vertical labelgap='.1rem' handleOnInput={input.handleOnInput} disabled={input.disabled} name={input.name} value={input.value} maxLength={input.maxLength} />
                 })
             }
 

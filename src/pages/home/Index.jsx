@@ -1,9 +1,10 @@
 import React from "react";
+import Button from '../../components/button/Button';
 
 export default function Home() {
     return (
         <div>
-            <h1>home</h1>
+            <Button.Leave />
         </div>
     )
 }

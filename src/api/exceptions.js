@@ -6,8 +6,17 @@ class ShopException {
     }
 }
 
+class AdminException {
+    message;
+
+    AdminException(message) {
+        this.message = message;
+    }
+}
+
 const exceptions = {
-    ShopException
+    ShopException,
+    AdminException
 }
 
 export default exceptions;

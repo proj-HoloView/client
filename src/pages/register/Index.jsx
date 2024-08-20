@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import Steps from "./steps/Step";
 import admin from '../../api/admin';
 import shop from '../../api/shop';
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-    const [formStep, setFormStep] = useState(1);
+    const [formStep, setFormStep] = useState(2);
 
     const [adminData, setAdminData] = useState(null);
 
@@ -13,7 +13,7 @@ export default function Register() {
 
     const [addressData, setAddressData] = useState(null);
 
-    let location = useLocation();
+    let navigate = useNavigate();
 
     useEffect(() => {
         const postShop = async () => {
@@ -45,12 +45,13 @@ export default function Register() {
         if (adminData && shopData && addressData) {
             try {
                 registerChain();
-                location('/home');
+
+                navigate('/home');
             } catch (e) {
                 console.log(e);
             }
         }
-    }, [adminData, shopData, addressData, location])
+    }, [adminData, shopData, addressData, navigate])
 
 
     function Form() {

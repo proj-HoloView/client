@@ -76,15 +76,68 @@ function Two(props) {
         props.setAddressData(addressData);
     }
 
+    const handleInputShopName = e => {
+        setShopData({ name: e.target.value });
+    }
+
+    const inputs = [
+        {
+            label: 'Nome da loja',
+            placeholder: 'Saint Paul',
+            handleOnInput: handleInputShopName,
+            value: shopData.name
+        },
+        {
+            label: 'CEP',
+            placeholder: '01310-930',
+            handleOnInput: handleOnInputCep,
+            borderColor: cepNotFound ? 'red' : 'black',
+            maxLength: 8
+        },
+        {
+            label: 'Número',
+            placeholder: '1B',
+            handleOnInput: handleAddressInput,
+            value: addressData.number,
+            name: 'number'
+        },
+        {
+            label: 'Complemento',
+            placeholder: 'Apto 110',
+            handleOnInput: handleAddressInput,
+            value: addressData.complement,
+            name: 'complement'
+        },
+        {
+            label: 'Logradouro',
+            placeholder: 'Avenida paulista',
+            handleOnInput: handleAddressInput,
+            value: addressData.street,
+            disabled: true
+        },
+        {
+            label: 'Cidade',
+            placeholder: 'São Paulo',
+            handleOnInput: handleAddressInput,
+            value: addressData.city,
+            disabled: true
+        },
+        {
+            label: 'Bairro',
+            placeholder: 'Guaianases',
+            handleOnInput: handleAddressInput,
+            value: addressData.district,
+            disabled: true
+        }
+    ];
+
     return (
         <div className={styles.container}>
-            <Input.Label label='Nome da loja' placeholder='Saint Paul' vertical labelGap='.1rem' handleOnInput={e => setShopData({ name: e.target.value })} value={shopData.name} />
-            <Input.Label borderColor={cepNotFound ? 'red' : 'black'} handleOnInput={handleOnInputCep} maxLength={8} label='CEP' placeholder='01310-930' vertical labelGap='.1rem' />
-            <Input.Label label='Número' placeholder='1B' vertical labelGap='.1rem' value={addressData.number} name={'number'} handleOnInput={handleAddressInput} />
-            <Input.Label label='Complemento' placeholder='Apto 110' vertical labelGap='.1rem' name={'complement'} handleOnInput={handleAddressInput} value={addressData.complement} />
-            <Input.Label disabled label='Logradouro' placeholder='Avenida paulista' vertical labelGap='.1rem' value={addressData.street} />
-            <Input.Label disabled label='Cidade' placeholder='São Paulo' value={addressData.city} vertical labelGap='.1rem' />
-            <Input.Label disabled label='Bairro' placeholder='Guaianases' value={addressData.district} vertical labelGap='.1rem' />
+            {
+                inputs.map(input => {
+                    return <Input.Label label={input.label} placeholder={input.placeholder} vertical labelgap='.1rem' handleOnInput={input.handleOnInput} disabled={input.disabled} name={input.name} value={input.value} maxLength={input.maxLength} />
+                })
+            }
 
             <Button.Default handleOnClick={sendPost}>Cadastrar loja</Button.Default>
         </div>

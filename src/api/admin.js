@@ -11,6 +11,13 @@ const postAdmin = async body => {
         return res.data;
 }
 
+const postAdminWithShop = async body => {
+    const res = await axios.post(`${url}/shop`, body);
+
+    if (res.status === 200)
+        return res.data;
+}
+
 const login = async body => {
     const res = await axios.post(`${url}/login`, body);
 
@@ -22,7 +29,8 @@ const login = async body => {
 
 const admins = {
     post: postAdmin,
-    login
+    login,
+    postShop: postAdminWithShop
 }
 
 export default admins;

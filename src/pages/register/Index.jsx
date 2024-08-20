@@ -1,59 +1,57 @@
 import React, { useEffect, useState } from "react";
 import Steps from "./steps/Step";
 import admin from '../../api/admin';
-import shop from '../../api/shop';
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-    const [formStep, setFormStep] = useState(2);
-
-    const [adminData, setAdminData] = useState(null);
-
-    const [shopData, setShopData] = useState(null);
-
-    const [addressData, setAddressData] = useState(null);
-
     let navigate = useNavigate();
 
+    // fase do formulário
+    const [formStep, setFormStep] = useState(1);
+    // informações de administrador
+    const [adminData, setAdminData] = useState(null);
+    // informações de loja
+    const [shopData, setShopData] = useState(null);
+    // informações de endereço de loja
+    const [addressData, setAddressData] = useState(null);
+
+    // useeffect responsável pela verificação de informações de admin, loja e endereço preenchidas para realizar o post
     useEffect(() => {
-        const postShop = async () => {
-            try {
-                const res = await shop.post(shopData);
-
-                return res.id;
-            } catch (e) {
-                console.log(e);
-            }
-        }
-
-        const postAdmin = async shopId => {
-            const res = await admin.post({ ...adminData, shopId });
-
-            return res;
-        }
-
         const registerChain = async () => {
-            const shopId = await postShop();
-            localStorage.setItem('shopId', shopId);
+            const registerBody = {
+                admin: adminData,
+                shop: shopData
+            }
 
-            const admin = await postAdmin(shopId);
-            localStorage.setItem('adminId', admin.id);
-            localStorage.setItem('adminUsername', admin.username);
-            sessionStorage.setItem('token', admin.token);
-        }
-
-        if (adminData && shopData && addressData) {
+            // try responsávle pelo post das informações e captura e armazenamento de info de administrador, token e loja retornas
             try {
-                registerChain();
+                const registerRes = await admin.postShop(registerBody);
+
+                localStorage.setItem('admin', JSON.stringify({
+                    id: registerRes.admin.id,
+                    username: registerRes.admin.username
+                }));
+
+                sessionStorage.setItem('token', registerRes.admin.token);
+
+                localStorage.setItem('shop', JSON.stringify({
+                    id: registerRes.shop.id,
+                    name: registerRes.shop.name
+                }));
 
                 navigate('/home');
             } catch (e) {
-                console.log(e);
+                // caso haja erro no cadastro, o formulário retorna para a primeira fase
+                setFormStep(1);
             }
+        }
+
+        if (adminData && shopData && addressData) {
+            registerChain();
         }
     }, [adminData, shopData, addressData, navigate])
 
-
+    // sub-componente de formulário, responsável pela decisão de passo do formulário a ser apresentado
     function Form() {
         switch (formStep) {
             case 1:
@@ -67,7 +65,6 @@ export default function Register() {
         }
     }
 
-    return (
-        <Form />
-    )
+    // Retorno final do componente
+    return <Form />
 }

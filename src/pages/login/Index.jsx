@@ -19,11 +19,14 @@ export default function Login() {
 
     const login = async () => {
         try {
-            const res = await admins.login(adminData);
+            const loginRes = await admins.login(adminData);
 
-            localStorage.setItem('adminId', res.id);
-            localStorage.setItem('adminUsername', res.username);
-            sessionStorage.setItem('token', res.token);
+            localStorage.setItem('admin', JSON.stringify({
+                id: loginRes.id,
+                username: loginRes.username
+            }));
+
+            sessionStorage.setItem('token', loginRes.token);
 
             navigate('/home');
         } catch (e) {
